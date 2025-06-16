@@ -25,5 +25,25 @@ namespace NetCoreAI.Project2_ApiConsumeUI.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult CreateCustomer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomer(CreateCustomerDto createCustomerDto)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var jsonData = JsonConvert.SerializeObject(createCustomerDto);
+            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var responseMessage = await client.PostAsync("https://localhost:7178/api/Customers", stringContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("CustomerList");
+            }
+            return View();
+        }
+
     }
 }
