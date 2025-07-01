@@ -82,12 +82,15 @@ class Program
         using (var client = new HttpClient())
         {
             // API anahtarı Authorization header'ına ekleniyor (Bearer token formatında)
+            // Olmazsa yine 401 Unauthorized hatası alınır (sayfaya erişimin engellediğinde ortaya çıkar)
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            
+
             // Form-data yapısı oluşturuluyor (multipart/form-data)
+            // Bu satır olmazsa gönderilen veri uygun formatta olmaz, sunucu işlemez
             var form = new MultipartFormDataContent();
 
             // Ses dosyası byte dizisine dönüştürülüyor
+            // Olmazsa sunucuya gönderecek bir içerik kalmaz
             var audioContent = new ByteArrayContent(File.ReadAllBytes(audioFilePath));
 
             // İçerik türü (MIME type) belirtiliyor: mp3 dosyası olduğu için "audio/mpeg"
